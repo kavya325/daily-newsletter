@@ -1,0 +1,27 @@
+name: Daily Newsletter
+
+on:
+  schedule:
+    - cron: '0 3 * * *'   # Runs every day at 3:00 AM UTC
+  workflow_dispatch:       # Allows manual trigger
+
+jobs:
+  send-newsletter:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: pip install feedparser
+
+    - name: Run newsletter script
+      env:
+        APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
+      run: python newsletter.py
